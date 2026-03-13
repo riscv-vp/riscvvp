@@ -80,10 +80,12 @@ void memrtl_module::b_transport (tlm::tlm_generic_payload& trans, sc_time& delay
 
                 //Lets do checks on RESP
                 if ((i == (length - 1)) && (last == 0)) {
-                    SC_REPORT_ERROR("MemRTL_Module", "FINAL burst beat has LAST set to 0.");
+                    LOG_DBG(sc_time_stamp() << ", ==================== !!!!!!! ERROR !!!!!!! =================== FINAL burst beat has LAST set to 0.");
+                    trans.set_response_status (tlm::TLM_GENERIC_ERROR_RESPONSE);
                 }
                 if ((i != (length - 1)) && (last == 1)) {
-                    SC_REPORT_ERROR("MemRTL_Module", "Not_FINAL burst beat has LAST set to 1.");
+                    LOG_DBG(sc_time_stamp() << ", ==================== !!!!!!! ERROR !!!!!!! =================== Not_FINAL burst beat has LAST set to 1.");
+                    trans.set_response_status (tlm::TLM_GENERIC_ERROR_RESPONSE);
                 }
             }
         } else {
@@ -148,10 +150,12 @@ void memrtl_module::b_transport (tlm::tlm_generic_payload& trans, sc_time& delay
 
                         //Lets do checks on RESP
                         if ((curr_resp == (length - 1)) && (last == 0)) {
-                            SC_REPORT_ERROR("MemRTL_Module", "FINAL burst beat has LAST set to 0.");
+                            LOG_DBG(sc_time_stamp() << ", ==================== !!!!!!! ERROR !!!!!!! =================== FINAL burst beat has LAST set to 0.");
+                            trans.set_response_status (tlm::TLM_GENERIC_ERROR_RESPONSE);
                         }
                         if ((curr_resp != (length - 1)) && (last == 1)) {
-                            SC_REPORT_ERROR("MemRTL_Module", "Not_FINAL burst beat has LAST set to 1.");
+                            LOG_DBG(sc_time_stamp() << ", ==================== !!!!!!! ERROR !!!!!!! =================== Not_FINAL burst beat has LAST set to 1.");
+                            trans.set_response_status (tlm::TLM_GENERIC_ERROR_RESPONSE);
                         }
                         curr_resp++;      //if resp read successfull increment curr_resp
                     }
@@ -221,16 +225,17 @@ void memrtl_module::pins2queue_method() {
 
 #if VM_TRACE
 void memrtl_module::set_trace(VerilatedVcdSc* tfp, int levels) {
-    veritopx->trace(tfp, levels);
+    veritop0->trace(tfp, levels);
 }
 #endif
 
 void memrtl_module::start_of_simulation() {
     rstn.write(false);
-    std::cout << sc_time_stamp() << "Initial (RESET_ON)" << std::endl;
+    LOG_DBG(sc_time_stamp() << ", Initial (RESET_ON)");
 }
 
 void memrtl_module::reset_thread() {
     wait(rst_timeout);
     rstn.write(true);
+    LOG_DBG(sc_time_stamp() << ", RESET_OFF");
 }

@@ -44,7 +44,7 @@ endif()
 verilate(tb_with_memrtl SYSTEMC
   INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../src/memrtl
   VERILATOR_ARGS -f ${CMAKE_CURRENT_SOURCE_DIR}/../src/memrtl/input.vc -x-assign fast --trace --assert --coverage
-  SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../src/memrtl/top_x.v
+  SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../src/memrtl/top0.v
 )
 verilator_link_systemc(tb_with_memrtl)
 

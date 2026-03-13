@@ -8,7 +8,7 @@ void spike_module::spike_thread() {
       proc->step(1);                //Call spike step
   }
 
-  cout << "Curr simtime - " <<  sc_time_stamp() << ": Spike_" << spike_id << " finished." << endl;
+  LOG_DBG(sc_time_stamp() << ", Spike finished.");
   running_threads_counter--;
 }
 

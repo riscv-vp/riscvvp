@@ -28,9 +28,9 @@ void tb_module::tb_thread() {
   drivemodel(data_array1, 0, false);
 
   if (data_array1 == data_array0) {
-      cout << "VECTORS MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS MATCH!!!!!");
   } else {
-      cout << "VECTORS DONT MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS DONT MATCH!!!!!");
       sim_test_ok = false;
   }
 
@@ -49,9 +49,9 @@ void tb_module::tb_thread() {
   drivemodel(data_array1, 0, false);
 
   if (data_array1 == data_array0) {
-      cout << "VECTORS MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS MATCH!!!!!");
   } else {
-      cout << "VECTORS DONT MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS DONT MATCH!!!!!");
       sim_test_ok = false;
   }
 
@@ -70,9 +70,9 @@ void tb_module::tb_thread() {
   drivemodel(data_array1, 0, false);
 
   if (data_array1 == data_array0) {
-      cout << "VECTORS MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS MATCH!!!!!");
   } else {
-      cout << "VECTORS DONT MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS DONT MATCH!!!!!");
       sim_test_ok = false;
   }
 
@@ -90,9 +90,9 @@ void tb_module::tb_thread() {
   drivemodel(data_array1, 0, false);
 
   if (data_array1 == data_array0) {
-      cout << "VECTORS MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS MATCH!!!!!");
   } else {
-      cout << "VECTORS DONT MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS DONT MATCH!!!!!");
       sim_test_ok = false;
   }
 
@@ -110,9 +110,9 @@ void tb_module::tb_thread() {
   drivemodel(data_array1, 0, false);
 
   if (data_array1 == data_array0) {
-      cout << "VECTORS MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS MATCH!!!!!");
   } else {
-      cout << "VECTORS DONT MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS DONT MATCH!!!!!");
       sim_test_ok = false;
   }
 
@@ -130,21 +130,20 @@ void tb_module::tb_thread() {
   drivemodel(data_array1, 0, false);
 
   if (data_array1 == data_array0) {
-      cout << "VECTORS MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS MATCH!!!!!");
   } else {
-      cout << "VECTORS DONT MATCH!!!!!" << endl;
+      LOG_DBG(sc_time_stamp() << ", VECTORS DONT MATCH!!!!!");
       sim_test_ok = false;
   }
 
 
 
   if (sim_test_ok) {
-      cout << "SIMULATION_PASS  :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)  SIMULATION_PASS" << endl;
+      LOG_DBG(sc_time_stamp() << ", SIMULATION_PASS  :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)   :-)  SIMULATION_PASS");
   } else {
-      cout << ":-( SIMULATION_FAIL :-(" << endl;
+      LOG_DBG(sc_time_stamp() << ", :-( SIMULATION_FAIL :-(");
   };
-
-  cout << "Curr simtime - " <<  sc_time_stamp() << ": TB finished." << endl;
+  LOG_DBG(sc_time_stamp() << ", TB finished.");
   running_threads_counter--;
 
 }

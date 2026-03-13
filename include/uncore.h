@@ -26,7 +26,7 @@ struct uncore_module: sc_module, debug_component {
   }
 
   ~uncore_module() {
-    std::cout << sc_time_stamp() << ": Cleanup: destructor" << std::endl;
+    LOG_DBG(sc_time_stamp() << ", destructor called");
   }
 
   void b_transport (tlm::tlm_generic_payload& trans, sc_time& delay);
@@ -39,7 +39,7 @@ enum class tlm_nexthop {
     UNKNOWN_DEVICE
 };
 
-  const cfg_t* const cfg;            //THIS IS ONLY NEEEDED BECAUSE OF get_cfg() overloaded virtual function
+  const cfg_t* const cfg;
   std::unique_ptr<bus_t> spike_bus;
   const char* fw_filename;           //Firmware to be loaded into RAM from where Spike will fetch instructions
 

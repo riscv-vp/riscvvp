@@ -18,7 +18,7 @@ struct memmodel_module: sc_module, debug_component {
   }
 
   ~memmodel_module() {
-    std::cout << sc_time_stamp() << ": Cleanup: destructor" << std::endl;
+    LOG_DBG(sc_time_stamp() << ", destructor called");
   }
 
 

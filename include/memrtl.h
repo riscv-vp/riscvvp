@@ -5,7 +5,7 @@
 #include "tlm_utils/simple_target_socket.h"
 #include "riscv/decode.h"        //required for reg_t type
 #include <verilated_vcd_sc.h>
-#include "Vtop_x.h"
+#include "Vtop0.h"
 #include "dbg_component.h"
 
 struct memrtl_module: sc_module, debug_component {
@@ -14,20 +14,20 @@ struct memrtl_module: sc_module, debug_component {
 
   tlm_utils::simple_target_socket<memrtl_module> target_socket;
 
-  SC_CTOR(memrtl_module, sc_time clk_period, sc_time rst_timeout) : clk_ch("clk", clk_period, 0.5, SC_ZERO_TIME, true), rst_timeout(rst_timeout), req_PIPE(4), resp_PIPE(4), target_socket("target_socket"), veritopx(std::make_unique<Vtop_x>("veritopx")), debug_component(name()) {
+  SC_CTOR(memrtl_module, sc_time clk_period, sc_time rst_timeout) : clk_ch("clk", clk_period, 0.5, SC_ZERO_TIME, true), rst_timeout(rst_timeout), req_PIPE(4), resp_PIPE(4), target_socket("target_socket"), veritop0(std::make_unique<Vtop0>("veritop0")), debug_component(name()) {
     target_socket.register_b_transport(this, &memrtl_module::b_transport);
 
     clk_port(clk_ch);     // Bind the internal clock channel to the port
 
     // Attach Vtop's signals to this upper model
-    veritopx->clk(clk_port);
-    veritopx->rst_n(rstn);
-    veritopx->up_valid(queue2pins_down_valid);
-    veritopx->up_data(queue2pins_down_data);
-    veritopx->up_ready(queue2pins_down_ready);
-    veritopx->down_valid(pins2queue_up_valid);
-    veritopx->down_data(pins2queue_up_data);
-    veritopx->down_ready(pins2queue_up_ready);
+    veritop0->clk(clk_port);
+    veritop0->rst_n(rstn);
+    veritop0->up_valid(queue2pins_down_valid);
+    veritop0->up_data(queue2pins_down_data);
+    veritop0->up_ready(queue2pins_down_ready);
+    veritop0->down_valid(pins2queue_up_valid);
+    veritop0->down_data(pins2queue_up_data);
+    veritop0->down_ready(pins2queue_up_ready);
 
     SC_THREAD(reset_thread);
     SC_METHOD(queue2pins_method);
@@ -37,8 +37,8 @@ struct memrtl_module: sc_module, debug_component {
   }
 
   ~memrtl_module() {
-    std::cout << sc_time_stamp() << ": Cleanup: destructor" << std::endl;
-    veritopx->final();
+    LOG_DBG(sc_time_stamp() << ", destructor called");
+    veritop0->final();
   }
 
   void start_of_simulation();
@@ -73,7 +73,7 @@ private:
   std::uint32_t ReadValueFromReqPIPE;
 
   // Using unique_ptr is similar to "Vtop* veritop = new Vtop" then deleting at end
-  const std::unique_ptr<Vtop_x> veritopx;
+  const std::unique_ptr<Vtop0> veritop0;
 
   // Define interconnect
   sc_signal<bool> rstn;

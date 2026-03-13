@@ -1,4 +1,4 @@
-module top_x # (
+module top0 # (
     parameter DW  = 32
 )
 (

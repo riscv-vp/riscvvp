@@ -29,7 +29,7 @@ struct spike_module: sc_module, simif_t, debug_component {
   }
 
   ~spike_module() {
-    std::cout << sc_time_stamp() << ": Cleanup: destructor" << std::endl;
+    LOG_DBG(sc_time_stamp() << ", destructor called");
   }
 
 private:
@@ -42,7 +42,7 @@ private:
   sc_time delay = SC_ZERO_TIME;
 
   // components
-  const cfg_t* const cfg;            //THIS IS ONLY NEEEDED BECAUSE OF get_cfg() overloaded virtual function
+  const cfg_t* const cfg;
   std::unique_ptr<processor_t> proc; // TODO check
   std::map<size_t, processor_t*> harts;
 
