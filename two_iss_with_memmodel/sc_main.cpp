@@ -5,8 +5,6 @@
 #include "spike.h"
 #include "memmodel.h"
 
-#include "vp_defines.h"
-
 int sc_main (int argc, char* argv[])
 {
 
@@ -15,13 +13,19 @@ int sc_main (int argc, char* argv[])
   try {
 
     cfg_t cfg;
-    cfg.isa = "rv64imafdcv_zicsr";  // Standard RV64GC ISA
-    cfg.priv = "MSU";        // Machine, Supervisor, and User privilege levels
-    cfg.misaligned = false;  // Don't allow misaligned memory accesses
+    cfg.isa = "rv64imafdcv_zicsr";       // Standard RV64GC ISA
+    cfg.priv = "MSU";                    // Machine, Supervisor, and User privilege levels
+    cfg.misaligned = false;              // Don't allow misaligned memory accesses
     cfg.endianness = endianness_little;  // Little endian
-    cfg.start_pc = VP_START_PC;  // Start PC
+    cfg.start_pc = 0x80000000;           // Start PC
     cfg.mem_layout.clear();
     cfg.pmpregions = 16;
+
+    ucfg_t ucfg;
+    ucfg.default_rstvec                              = 0x00001000;
+    ucfg.spike_ram_memory_address                    = 0x80000000;
+    ucfg.extram_start_address                        = 0x81000000;
+    ucfg.extram_end_address                          = 0x81FFFFFF;
 
     log_file_t log_fileA{"spike0_log.txt"};
     log_file_t log_fileB{"spike1_log.txt"};
@@ -29,7 +33,7 @@ int sc_main (int argc, char* argv[])
     const std::unique_ptr<spike_module> spike0{new spike_module{"spike0", 0, running_threads_counter, &cfg, log_fileA}};
     const std::unique_ptr<spike_module> spike1{new spike_module{"spike1", 1, running_threads_counter, &cfg, log_fileB}};
 
-    const std::unique_ptr<uncore_module> uncore{new uncore_module{"uncore", &cfg, "main.bin"}};
+    const std::unique_ptr<uncore_module> uncore{new uncore_module{"uncore", &cfg, &ucfg, "main.bin"}};
     const std::unique_ptr<memmodel_module> memmodel{new memmodel_module{"memmodel"}};
 
     spike0->initiator_socket.bind(uncore->target_socket0);

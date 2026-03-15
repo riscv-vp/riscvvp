@@ -9,7 +9,7 @@ uncore_module::tlm_nexthop uncore_module::tlm_address_decode(reg_t paddr) {
     auto desc = spike_bus->find_device(paddr >> PGSHIFT << PGSHIFT, PGSIZE);
     if (desc.first != 0) {
         return tlm_nexthop::SPIKE_BUS;
-    } else if (VP_EXTRAM_START_ADDRESS <= paddr && paddr <= VP_EXTRAM_END_ADDRESS) {
+    } else if (ucfg->extram_start_address <= paddr && paddr <= ucfg->extram_end_address) {
         return tlm_nexthop::EXTRAM;
     } else {
         return tlm_nexthop::UNKNOWN_DEVICE;
@@ -48,8 +48,8 @@ void uncore_module::b_transport (tlm::tlm_generic_payload& trans, sc_time& delay
         }
         case tlm_nexthop::EXTRAM: {
             LOG_DBG(sc_time_stamp() << ", TLM to EXTRAM is called for address 0x" << hex << addr << " (len=" << dec << length << ") via tlm2");
-            delay = delay + sc_time(7, SC_NS);                    //Lets add some interconnect delay
-            trans.set_address(addr - VP_EXTRAM_START_ADDRESS);    //We modify address of the transaction so that EXTRAM will see address with base address to be zero
+            delay = delay + sc_time(7, SC_NS);                       //Lets add some interconnect delay
+            trans.set_address(addr - ucfg->extram_start_address);    //We modify address of the transaction so that EXTRAM will see address with base address to be zero
             initiator_socket->b_transport(trans, delay);
             break;
         }
@@ -100,8 +100,8 @@ void uncore_module::setup() {
   spike_ram = std::make_shared<mem_t>(16384);
   read_bin_on_memory(fw_filename, spike_ram.get(), 0);
 
-  spike_bus->add_device(VP_DEFAULT_RSTVEC, spike_boot_rom.get());
-  spike_bus->add_device(VP_SPIKE_RAM_MEMORY_ADDRESS, spike_ram.get());
+  spike_bus->add_device(ucfg->default_rstvec, spike_boot_rom.get());
+  spike_bus->add_device(ucfg->spike_ram_memory_address, spike_ram.get());
 }
 
 void uncore_module::read_bin_on_memory(const char* filename, void *memory, uint64_t offset) {

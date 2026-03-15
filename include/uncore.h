@@ -9,7 +9,13 @@
 #include "riscv/devices.h"
 #include "dbg_component.h"
 
-#include "vp_defines.h"
+struct ucfg_t {               //uncore config struct
+  reg_t default_rstvec;
+  reg_t spike_ram_memory_address;
+  reg_t extram_start_address;
+  reg_t extram_end_address;
+};
+
 
 struct uncore_module: sc_module, debug_component {
 
@@ -19,7 +25,7 @@ struct uncore_module: sc_module, debug_component {
   tlm_utils::simple_target_socket<uncore_module> target_socket1;
   tlm_utils::simple_initiator_socket<uncore_module> initiator_socket;
 
-  SC_CTOR(uncore_module, const cfg_t* cfg, const char* fw_filename) : cfg(cfg), target_socket0("target_socket0"), target_socket1("target_socket1"), spike_bus(std::make_unique<bus_t>()), fw_filename(fw_filename), debug_component(name()) {
+  SC_CTOR(uncore_module, const cfg_t* cfg, const ucfg_t* ucfg, const char* fw_filename) : cfg(cfg), ucfg(ucfg), target_socket0("target_socket0"), target_socket1("target_socket1"), spike_bus(std::make_unique<bus_t>()), fw_filename(fw_filename), debug_component(name()) {
     target_socket0.register_b_transport(this, &uncore_module::b_transport);
     target_socket1.register_b_transport(this, &uncore_module::b_transport);
     setup();
@@ -40,6 +46,7 @@ enum class tlm_nexthop {
 };
 
   const cfg_t* const cfg;
+  const ucfg_t* const ucfg;
   std::unique_ptr<bus_t> spike_bus;
   const char* fw_filename;           //Firmware to be loaded into RAM from where Spike will fetch instructions
 
