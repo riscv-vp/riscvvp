@@ -7,7 +7,7 @@
 
 uncore_module::tlm_nexthop uncore_module::tlm_address_decode(reg_t paddr) {
     auto desc = spike_bus->find_device(paddr >> PGSHIFT << PGSHIFT, PGSIZE);
-    if (desc.first != 0) {
+    if (desc.second) {
         return tlm_nexthop::SPIKE_BUS;
     } else if (ucfg->extram_start_address <= paddr && paddr <= ucfg->extram_end_address) {
         return tlm_nexthop::EXTRAM;

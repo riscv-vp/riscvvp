@@ -25,7 +25,7 @@ struct uncore_module: sc_module, debug_component {
   tlm_utils::simple_target_socket<uncore_module> target_socket1;
   tlm_utils::simple_initiator_socket<uncore_module> initiator_socket;
 
-  SC_CTOR(uncore_module, const cfg_t* cfg, const ucfg_t* ucfg, const char* fw_filename) : cfg(cfg), ucfg(ucfg), target_socket0("target_socket0"), target_socket1("target_socket1"), spike_bus(std::make_unique<bus_t>()), fw_filename(fw_filename), debug_component(name()) {
+  SC_CTOR(uncore_module, const cfg_t* cfg, const ucfg_t* ucfg, const char* fw_filename) : cfg(cfg), ucfg(ucfg), target_socket0("target_socket0"), target_socket1("target_socket1"), spike_bus(std::make_unique<bus_t>(nullptr)), fw_filename(fw_filename), debug_component(name()) {
     target_socket0.register_b_transport(this, &uncore_module::b_transport);
     target_socket1.register_b_transport(this, &uncore_module::b_transport);
     setup();
