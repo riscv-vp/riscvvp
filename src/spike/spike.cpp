@@ -6,6 +6,7 @@ void spike_module::spike_thread() {
 
   while (keep_sim) {
       proc->step(1);                //Call spike step
+      wait(2, SC_NS);               //Replace with quantum keeper
   }
 
   LOG_DBG(sc_time_stamp() << ", Spike finished.");
